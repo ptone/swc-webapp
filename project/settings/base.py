@@ -19,10 +19,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '9702pj+k695m0i4-a^-)61bpe7ywr*x6_!@jm5+m0aizga#e%n'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -36,6 +32,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'swc'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -55,12 +52,6 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/
