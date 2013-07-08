@@ -27,13 +27,13 @@ class SWCPerson(models.Model):
 
 class UpcomingEventManager(models.Manager):
     def get_queryset(self):
-        return super(UpcomingEventManager, self).get_queryset.filter(
+        return super(UpcomingEventManager, self).get_queryset().filter(
                 start_date__gte=datetime.date.today())
 
 
 class OpenEventsManager(UpcomingEventManager):
     def get_queryset(self):
-        return super(OpenEventsManager, self).get_queryset.filter(
+        return super(OpenEventsManager, self).get_queryset().filter(
                 registration='open')
 
 
