@@ -1,20 +1,25 @@
+from __future__ import unicode_literals
+
 import datetime
 
 from django.db import models
 
 from django.contrib.auth.models import User
+from django.utils.encoding import python_2_unicode_compatible
 
 from model_utils import Choices
 
-# Create your models here.
 
-
+@python_2_unicode_compatible
 class SWCPerson(models.Model):
     user = models.OneToOneField(User, related_name="profile")
     bio = models.TextField(blank=True)
     # location
     # organizational affiliation
     contact_phone = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 class UpcomingEventManager(models.Manager):
@@ -29,6 +34,7 @@ class OpenEventsManager(UpcomingEventManager):
                 registration='open')
 
 
+@python_2_unicode_compatible
 class SWCEvent(models.Model):
     TYPES = Choices('bootcamp', 'training')
     REGISTRATIONS = Choices('open', 'restricted', 'full', 'pending', 'closed')
@@ -51,7 +57,11 @@ class SWCEvent(models.Model):
     upcoming = UpcomingEventManager()
     open = OpenEventsManager()
 
+    def __str__(self):
+        return "{}-{}".format(self.start_date, self.venue)
 
+
+@python_2_unicode_compatible
 class Participant(models.Model):
     ROLES = Choices('instructor', 'helper', 'host', 'student')
     event = models.ForeignKey(SWCEvent)
@@ -66,5 +76,8 @@ class Participant(models.Model):
             help_text="Did the participant show up?")
     completed = models.BooleanField(default=False,
             help_text="Did the participant remain and complete the event?")
+
+    def __str__(self):
+        return '-'.join(self.event, self.person, self.role)
 
 # TODO Badge
