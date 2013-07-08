@@ -61,6 +61,9 @@ class SWCEvent(models.Model):
     upcoming = UpcomingEventManager()
     open = OpenEventsManager()
 
+    class Meta:
+        unique_together = (("start_date", "venue"),)
+
     def __str__(self):
         return "{}-{}".format(self.start_date, self.venue)
 
