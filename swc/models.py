@@ -17,6 +17,7 @@ class SWCPerson(models.Model):
     # location
     # organizational affiliation
     contact_phone = models.TextField(blank=True)
+    profile_email = models.EmailField(max_length=254)
 
     class Meta:
         verbose_name_plural = "People"
