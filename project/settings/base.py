@@ -12,16 +12,18 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
+
+# from jingo import EXCLUDE_APPS
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '9702pj+k695m0i4-a^-)61bpe7ywr*x6_!@jm5+m0aizga#e%n'
+# secret key is set in sub settings files, loading from env as needed
+SECRET_KEY = 'base-dummy-key'
 
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -32,7 +34,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'swc'
+    'south',
+    'django_browserid',
+    'swc',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -42,6 +46,22 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'django_browserid.auth.BrowserIDBackend',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS += (
+   'django_browserid.context_processors.browserid',
+   'swc.utils.swc_context',
+)
+
+TEMPLATE_LOADERS = (
+    'jingo.Loader',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
 )
 
 ROOT_URLCONF = 'project.urls'
@@ -71,3 +91,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# browserid settings:
+
+# Path to redirect to on successful login.
+LOGIN_REDIRECT_URL = '/'
+
+# Path to redirect to on unsuccessful login attempt.
+LOGIN_REDIRECT_URL_FAILURE = '/'
+
+# Path to redirect to on logout.
+LOGOUT_REDIRECT_URL = '/'
+# JINGO_EXCLUDE_APPS = EXCLUDE_APPS + ('browserid',)
+JINGO_EXCLUDE_APPS = (
+    'admin',
+    'admindocs',
+    'browserid',
+    'registration',
+    'context_processors',
+)
+JINJA_CONFIG = {'autoescape': False}
