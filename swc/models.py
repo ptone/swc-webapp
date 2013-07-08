@@ -12,18 +12,21 @@ from model_utils import Choices
 
 @python_2_unicode_compatible
 class SWCPerson(models.Model):
-    user = models.OneToOneField(User, related_name="profile")
+    user = models.OneToOneField(User, related_name="profile", null=True,
+            blank=True)
+    name1 = models.CharField(max_length=80)
+    name2 = models.CharField(max_length=80, blank=True)
     bio = models.TextField(blank=True)
     # location
     # organizational affiliation
     contact_phone = models.TextField(blank=True)
-    profile_email = models.EmailField(max_length=254)
+    profile_email = models.EmailField(max_length=254, unique=True, blank=True)
 
     class Meta:
         verbose_name_plural = "People"
 
     def __str__(self):
-        return self.user.username
+        return "{} {}".format(self.name1, self.name2)
 
 
 class UpcomingEventManager(models.Manager):
