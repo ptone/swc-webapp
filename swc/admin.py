@@ -7,8 +7,14 @@ class PersonAdmin(admin.ModelAdmin):
 
 admin.site.register(SWCPerson, PersonAdmin)
 
+class ParticipantInline(admin.TabularInline):
+    model = Participant
 
 class EventAdmin(admin.ModelAdmin):
-    pass
-
+    # TODO set reg actions
+    date_hierarchy = 'start_date'
+    list_display = ['venue', 'start_date', 'registration']
+    list_editable = ['registration']
+    list_filter = ['registration']
+    inlines = [ParticipantInline]
 admin.site.register(SWCEvent, EventAdmin)
