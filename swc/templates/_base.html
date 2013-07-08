@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html>
+
+{% macro youtube(title, stem, time) -%}
+  <div class="youtube">
+    <iframe title="{{title}}"
+            src="http://www.youtube.com/embed/{{stem}}"
+            time="{{time}}"
+            width="640" height="506"
+            frameborder="0"
+            allowfullscreen="allowfullscreen"></iframe>
+  </div>
+{%- endmacro %}
+
+{% macro disqus(title, ident) -%}
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'software-carpentry';
+  var disqus_developer = 1;
+  var disqus_identifier = '{{ident}}';
+  var disqus_title = '{{title}}';
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+{%- endmacro %}
+
+{% macro navhighlight(section) -%}
+<script type="text/javascript">
+  var nav = document.getElementById('nav-{{section}}');
+  if (nav.className) {
+    nav.className = nav.className + ' active';
+  } else {
+    nav.className = 'active';
+  }
+</script>
+{%- endmacro %}
+
+{% macro list_badges(badge_kind, people) -%}
+<div style="clear:both; bottom-margin:30px;">
+<ul>
+  {% for name, user, site in people %}
+  <div class="pull-left" style="width:175px;">
+  <li><a badge-kind="{{badge_kind}}"
+         badge-user="{{user}}"
+         {% if site %}
+         href="{{site}}">
+         {% else %}
+         href="{{page.root}}/about/team.html#{{user}}">
+         {% endif %}
+         {{name}}</a></li>
+  </div>
+  {% endfor %}
+</ul>
+</div>
+<div style="clear:both;"></div>
+
+{%- endmacro %}
+
+{% macro badge_issuing() -%}
+<!-- attach actions -->
+<script src="http://beta.openbadges.org/issuer.js"></script>
+<script type="text/javascript">
+  window.onload = function () {
+    $('a[badge-kind]').click(function (e) {
+      e.preventDefault();
+      var kind = $(this).attr('badge-kind');
+      var user = $(this).attr('badge-user');
+      var link = $(this).attr('href');
+
+      // configure dialog
+      var assertionURL = "{{site}}/badges/"+kind+"/"+user+".json";
+      $('#assertion-modal iframe').attr('src', assertionURL);
+      $('#assertion-modal button[name=add]').click(function(e) {
+        OpenBadges.issue([assertionURL]);});
+      $('#modal-badge-img').attr("src", "{{site}}/img/badges/"+kind+".png");
+      $('#assertion-modal div.modal-footer a').attr("href", link);
+      $('#assertion-modal').modal('show');
+      return false;
+    });
+  };
+</script>
+
+<!-- Model dialog for the assertion -->
+<div id="assertion-modal" class="modal hide fade" role="dialog">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Badge Details</h3>
+  </div>
+  <div class="modal-body">
+    The following blob (known as an <a
+    href="https://github.com/mozilla/openbadges/wiki/Assertions">assertion</a>)
+    certifies the work done for this badge. If this is your badge, you may add
+    it to your Mozilla Backpack.
+    <iframe src=""></iframe>
+    <img id="modal-badge-img" src=""/>
+  </div>
+  <div class="modal-footer">
+    <a class="pull-left" href="{{site}}/about/team.html">More about this person</a>
+    <button class="btn" name="add">Add badge to my Backpack</button>
+    <button class="btn" data-dismiss="modal">Close</button>
+  </div>
+</div>
+{%- endmacro %}
+
+  <head>
+    <link rel="shortcut icon" type="image/x-icon" href="{{page.root}}/favicon.ico" />
+    {% block css %}
+    <link href="{{page.shared}}/css/bootstrap/bootstrap.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="{{page.shared}}/css/bootstrap/bootstrap-responsive.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{{page.root}}/bc/css/swc.css" />
+    <link rel="stylesheet" type="text/css" href="{{page.root}}/bc/css/swc-bootstrap.css" />
+    <link rel="alternate" type="application/rss+xml" title="The Software Carpentry Blog" href="{{site.site}}/feed.xml"/>
+    <meta http-equiv="last-modified" content="{{site.timestamp}}" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    {% endblock css %}
+    {% block metadata %}{% endblock metadata %}
+    {% block file_metadata %}{% endblock file_metadata %}
+    {% block pagetitle %}<title>Software Carpentry: {{page.title}}</title>{% endblock pagetitle %}
+    {% block javascript %}{% endblock javascript %}
+  </head>
+
+  <body {%- block onload %}{% endblock onload -%} >
+    {{ browserid_info() }}
+    <div class="container shadow">
+
+      <div class="banner">
+        <a href="{{page.root}}/index.html" title="Software Carpentry Home">
+          <img src="{{page.shared}}/img/logos/software-carpentry-banner.png" alt="Software Carpentry banner" />
+        </a>
+      </div>
+
+      {% include "navbar.html" %}
+      {% block navhighlight %}{% endblock navhighlight %}
+
+      <div class="row-fluid">
+        <div class="span10 offset1">
+        {% block title %}
+        <h1 class="title">{{page.title}}</h1>
+        {% endblock title %}
+        {% block details %}{% endblock details %}
+	{% block files %}{% endblock files %}
+        <!-- start content -->
+        {% block content %}{% endblock content %}
+        <!-- end content -->
+        {% block comments %}{{disqus(page.title, page.path)}}{% endblock comments %}
+        </div>
+      </div>
+
+      {% include "footer.html" %}
+    </div>
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="{{page.root}}/js/bootstrap/bootstrap.min.js"></script>
+    {{ browserid_js() }}
+    <!-- Google Analytics -->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-37305346-1']);
+      _gaq.push(['_setDomainName', 'software-carpentry.org']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </body>
+</html>
