@@ -18,6 +18,9 @@ class SWCPerson(models.Model):
     # organizational affiliation
     contact_phone = models.TextField(blank=True)
 
+    class Meta:
+        verbose_name_plural = "People"
+
     def __str__(self):
         return self.user.username
 
