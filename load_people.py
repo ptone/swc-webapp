@@ -7,7 +7,7 @@ import re
 
 from swc.models import SWCPerson
 
-people_path = '/Users/preston/Projects/swc/new-site/site/bc/_includes/people/*.html'
+people_path = '../site/bc/_includes/people/*.html'
 
 people_files = glob.glob(people_path)
 

@@ -35,7 +35,7 @@ def harvest_single(filename):
         meta_dict['path'] = filename
         return meta_dict
 
-bootcamp_path = '/Users/preston/Projects/swc/new-site/site/bootcamps/'
+bootcamp_path = '../site/bootcamps/'
 pages = glob.glob('{}*/index.html'.format(bootcamp_path))
 
 metadata = harvest(pages)
