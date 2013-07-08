@@ -24,10 +24,10 @@ class SWCEvent(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     human_times = models.CharField(verbose_name="Event Times",
-            default="9AM to 4:30PM")
+            default="9AM to 4:30PM", max_length=50)
     venue = models.TextField(blank=True)
     registration = models.CharField(choices=REGISTRATIONS,
-            default=REGISTRATIONS.pending)
+            default=REGISTRATIONS.pending, max_length=40)
     capacity = models.IntegerField(default=40)
     home_page = models.URLField(blank=True)
     participants = models.ManyToManyField(SWCPerson, through='Participant')
@@ -35,9 +35,10 @@ class SWCEvent(models.Model):
 
 class Participant(models.Model):
     ROLES = Choices('instructor', 'helper', 'host', 'student')
-    event = models.ForiegnKey(SWCEvent)
-    person = models.ForiegnKey(SWCPerson, related_name='participation_set')
-    role = models.CharField(choices=ROLES, default=ROLES.student)
+    event = models.ForeignKey(SWCEvent)
+    person = models.ForeignKey(SWCPerson, related_name='participation_set')
+    role = models.CharField(choices=ROLES, default=ROLES.student,
+            max_length=40)
     # confirmed can be used to track whether the participant affirmed a
     # reminder sent x days before event
     confirmed = models.BooleanField(default=False,
