@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 
 from django.contrib.auth.models import User
@@ -15,9 +17,22 @@ class SWCPerson(models.Model):
     contact_phone = models.TextField(blank=True)
 
 
+class UpcomingEventManager(models.Manager):
+    def get_queryset(self):
+        return super(UpcomingEventManager, self).get_queryset.filter(
+                start_date__gte=datetime.date.today())
+
+
+class OpenEventsManager(UpcomingEventManager):
+    def get_queryset(self):
+        return super(OpenEventsManager, self).get_queryset.filter(
+                registration='open')
+
+
 class SWCEvent(models.Model):
     TYPES = Choices('bootcamp', 'training')
     REGISTRATIONS = Choices('open', 'restricted', 'full', 'pending', 'closed')
+
     type = models.CharField(choices=TYPES, default=TYPES.bootcamp,
             max_length=50)
     # location
@@ -31,6 +46,10 @@ class SWCEvent(models.Model):
     capacity = models.IntegerField(default=40)
     home_page = models.URLField(blank=True)
     participants = models.ManyToManyField(SWCPerson, through='Participant')
+
+    objects = models.Manager()
+    upcoming = UpcomingEventManager()
+    open = OpenEventsManager()
 
 
 class Participant(models.Model):
