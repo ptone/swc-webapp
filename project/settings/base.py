@@ -34,6 +34,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'south',
     'django_browserid',
     'swc',
@@ -63,6 +64,10 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 )
+
+TEMPLATE_DIRS = (
+        os.path.join(BASE_DIR, 'templates'),
+        )
 
 ROOT_URLCONF = 'project.urls'
 
