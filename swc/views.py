@@ -9,5 +9,5 @@ class EventList(ListView):
 
 class UpcomingBootcamps(EventList):
     def get_queryset(self):
-        self.model.upcoming.all()
+        return self.model.upcoming.all()
 

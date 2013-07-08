@@ -5,7 +5,11 @@
 {% block content %}
 <h1>Upcoming Bootcamps:</h1>
 
-{{ object_list }}
+<ul>
+    {% for camp in object_list %}
+    <li>{{ camp.start_date }} {{ camp.venue }} {{ camp.id }}</li>
+    {% endfor %}
+</ul>
 
 {% endblock content %}
 
