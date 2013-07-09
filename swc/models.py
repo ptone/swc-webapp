@@ -44,7 +44,14 @@ class OpenEventsManager(UpcomingEventManager):
 @python_2_unicode_compatible
 class SWCEvent(models.Model):
     TYPES = Choices('bootcamp', 'training')
-    REGISTRATIONS = Choices('open', 'restricted', 'full', 'pending', 'closed')
+    REGISTRATIONS = Choices(
+            'open',
+            'restricted',
+            'full',
+            'pending',
+            'closed',
+            'proposed',
+            )
 
     type = models.CharField(choices=TYPES, default=TYPES.bootcamp,
             max_length=50)
@@ -55,7 +62,7 @@ class SWCEvent(models.Model):
             default="9AM to 4:30PM", max_length=50)
     venue = models.TextField(blank=True)
     registration = models.CharField(choices=REGISTRATIONS,
-            default=REGISTRATIONS.pending, max_length=40)
+            default=REGISTRATIONS.proposed, max_length=40)
     capacity = models.IntegerField(default=40)
     home_page = models.URLField(blank=True)
     participants = models.ManyToManyField(SWCPerson, through='Participant')
