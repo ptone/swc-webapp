@@ -66,6 +66,7 @@ class SWCEvent(models.Model):
 
     class Meta:
         unique_together = (("start_date", "venue"),)
+        ordering = ['start_date']
 
     def __str__(self):
         return "{}-{}".format(self.start_date, self.venue)
