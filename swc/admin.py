@@ -12,6 +12,7 @@ admin.site.register(SWCPerson, PersonAdmin)
 
 class ParticipantInline(admin.TabularInline):
     model = Participant
+    ordering = ['role', 'person__name1']
 
 
 class PastPresentFilter(admin.SimpleListFilter):
@@ -42,7 +43,7 @@ class EventAdmin(admin.ModelAdmin):
     date_hierarchy = 'start_date'
     list_display = ['venue', 'start_date', 'registration']
     list_editable = ['registration']
-    list_filter = ['registration', PastPresentFilter]
+    list_filter = ['type', 'registration', PastPresentFilter]
     inlines = [ParticipantInline]
 
     def get_ordering(self, request):
