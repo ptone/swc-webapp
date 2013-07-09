@@ -89,6 +89,6 @@ class Participant(models.Model):
             help_text="Did the participant remain and complete the event?")
 
     def __str__(self):
-        return '-'.join(self.event, self.person, self.role)
+        return '{}-{}-{}'.format(self.event, self.person, self.role)
 
 # TODO Badge
