@@ -1,0 +1,9 @@
+-r base_requirements.txt
+PyYAML==3.10
+cssselect==0.8
+django-extensions==1.1.1
+ipython==0.13.2
+lxml==3.2.1
+pyquery==1.2.4
+readline==6.2.4.1
+requests==1.2.3
