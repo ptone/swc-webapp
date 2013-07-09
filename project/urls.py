@@ -1,7 +1,10 @@
+import os
+
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from swc.views import UpcomingBootcamps
 
@@ -16,3 +19,6 @@ urlpatterns = patterns('',
     (r'^browserid/', include('django_browserid.urls')),
     url(r'^$', TemplateView.as_view(template_name='home.html'), name='home'),
 )
+
+if 'production' not in os.environ['DJANGO_SETTINGS_MODULE']:
+    urlpatterns += staticfiles_urlpatterns()
