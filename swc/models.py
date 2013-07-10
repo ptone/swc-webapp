@@ -7,12 +7,30 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
 
+from jsonfield import JSONField
 from model_utils import Choices
 from model_utils.managers import QueryManager
 
+class GeoLocation(models.Model):
+    """
+    An abstract class to house geographic info
+    """
+    # raw geocode data from google API
+    geodata = JSONField()
+    country = models.CharField(max_length=50, blank=True)
+    lat = models.FloatField(null=True, blank=True)
+    long = models.FloatField(null=True, blank=True)
+    # the google geocode type resolution
+    type = models.CharField(max_length=40, blank=True)
+    # the SWC notion of bootcamp regions, determined from country
+    region = models.CharField(max_length=40, blank=True)
+
+    class Meta:
+        abstract = True
+
 
 @python_2_unicode_compatible
-class SWCPerson(models.Model):
+class SWCPerson(GeoLocation):
     user = models.OneToOneField(User, related_name="profile", null=True,
             blank=True)
     name1 = models.CharField(max_length=80)
@@ -31,7 +49,7 @@ class SWCPerson(models.Model):
 
 
 @python_2_unicode_compatible
-class SWCEvent(models.Model):
+class SWCEvent(GeoLocation):
     TYPES = Choices('bootcamp', 'training')
     REGISTRATIONS = Choices(
             'open',
