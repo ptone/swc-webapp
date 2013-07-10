@@ -71,6 +71,10 @@ class SWCEvent(models.Model):
     upcoming = UpcomingEventManager()
     open = OpenEventsManager()
 
+    @property
+    def slug(self):
+        return self.__str__()
+
     class Meta:
         unique_together = (("start_date", "venue"),)
         ordering = ['start_date']

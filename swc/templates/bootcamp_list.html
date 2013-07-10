@@ -7,7 +7,7 @@
 
 <ul>
     {% for camp in object_list %}
-    <li>{{ camp.start_date }} {{ camp.venue }} {{ camp.id }}</li>
+    <li><a href="{{ url('event_detail_id', pk=camp.pk) }}{{ camp.slug }}">{{ camp.venue }} {{ camp.start_date }}</a></li>
     {% endfor %}
 </ul>
 
