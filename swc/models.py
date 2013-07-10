@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
 
 from model_utils import Choices
+from model_utils.managers import QueryManager
 
 
 @python_2_unicode_compatible
@@ -27,18 +28,6 @@ class SWCPerson(models.Model):
 
     def __str__(self):
         return "{} {}".format(self.name1, self.name2)
-
-
-class UpcomingEventManager(models.Manager):
-    def get_queryset(self):
-        return super(UpcomingEventManager, self).get_queryset().filter(
-                start_date__gte=datetime.date.today())
-
-
-class OpenEventsManager(UpcomingEventManager):
-    def get_queryset(self):
-        return super(OpenEventsManager, self).get_queryset().filter(
-                registration='open')
 
 
 @python_2_unicode_compatible
@@ -68,8 +57,11 @@ class SWCEvent(models.Model):
     participants = models.ManyToManyField(SWCPerson, through='Participant')
 
     objects = models.Manager()
-    upcoming = UpcomingEventManager()
-    open = OpenEventsManager()
+    upcoming = QueryManager(start_date__gte=datetime.date.today())
+    open = QueryManager(
+            start_date__gte=datetime.date.today(),
+            registration='open',
+            )
 
     @property
     def slug(self):
