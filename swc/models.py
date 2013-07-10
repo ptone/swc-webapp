@@ -47,6 +47,14 @@ class SWCPerson(GeoLocation):
     def __str__(self):
         return "{} {}".format(self.name1, self.name2)
 
+    @property
+    def email(self):
+        if self.profile_email:
+            return self.profile_email
+        if self.user and self.user.email:
+            return self.user.email
+        return None
+
 
 @python_2_unicode_compatible
 class SWCEvent(GeoLocation):
