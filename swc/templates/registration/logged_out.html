@@ -1,0 +1,11 @@
+{% extends "_base.html" %}
+{% block pagetitle %}Logged out{% endblock pagetitle %}
+
+{% block content %}
+<h2>You've been logged out</h2>
+
+<div>
+    <a href="{{ url('login')}}">Login again...</a>
+</div>
+{% endblock content %}
+{% block comments %}{% endblock comments %}

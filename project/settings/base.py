@@ -28,7 +28,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -36,8 +35,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_extensions',
     'south',
-    'django_browserid',
+    'social_auth',
     'swc',
+    'django.contrib.admin',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -50,13 +50,36 @@ MIDDLEWARE_CLASSES = (
 )
 
 AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.browserid.BrowserIDBackend',
+    'social_auth.backends.contrib.github.GithubBackend',
+    # 'social_auth.backends.google.GoogleOAuth2Backend',
     'django.contrib.auth.backends.ModelBackend',
-    'django_browserid.auth.BrowserIDBackend',
+)
+
+# TODO any secrets need to be moved out of settings once this goes beyond demo
+GITHUB_APP_ID = '2471bc178c6f5c3325e6'
+GITHUB_API_SECRET = '2336ccf64b6972236f61f94d3876b7a5309ce160'
+GITHUB_EXTENDED_PERMISSIONS = ['user:email']
+
+# GOOGLE_OAUTH2_CLIENT_ID = ''
+# GOOGLE_OAUTH2_CLIENT_SECRET = ''
+
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_auth.backends.pipeline.social.social_auth_user',
+    'social_auth.backends.pipeline.associate.associate_by_email',
+    'social_auth.backends.pipeline.user.get_username',
+    'social_auth.backends.pipeline.user.create_user',
+    'social_auth.backends.pipeline.social.associate_user',
+    'social_auth.backends.pipeline.social.load_extra_data',
+    'social_auth.backends.pipeline.user.update_user_details'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS += (
-   'django_browserid.context_processors.browserid',
-   'swc.utils.swc_context',
+    'social_auth.context_processors.social_auth_login_redirect',
+    'swc.utils.swc_context',
 )
 
 TEMPLATE_LOADERS = (
@@ -108,11 +131,15 @@ LOGIN_REDIRECT_URL_FAILURE = '/'
 # Path to redirect to on logout.
 LOGOUT_REDIRECT_URL = '/'
 # JINGO_EXCLUDE_APPS = EXCLUDE_APPS + ('browserid',)
+
 JINGO_EXCLUDE_APPS = (
     'admin',
+    # 'auth',
     'admindocs',
-    'browserid',
-    'registration',
+    # 'registration',
     'context_processors',
+    'social_auth',
+    'auth'
 )
+
 JINJA_CONFIG = {'autoescape': False}

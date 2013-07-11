@@ -89,12 +89,5 @@
     </table>
   </div>
 </div>
-      <div class="authentication">
-        {% if user.is_authenticated() %}
-          {{ browserid_logout(text='Logout') }}
-        {% else %}
-          {{ browserid_login(text='Login') }}
-        {% endif %}
-      </div>
 {% endblock content %}
 {% block comments %}{% endblock comments %}

@@ -130,7 +130,6 @@
   </head>
 
   <body {%- block onload %}{% endblock onload -%} >
-    {{ browserid_info() }}
     <div class="container shadow">
 
       <div class="banner">
@@ -145,7 +144,7 @@
       <div class="row-fluid">
         <div class="span10 offset1">
         {% block title %}
-        <h1 class="title">{{page.title}}</h1>
+        <h1 class="title">{{ page.title }}</h1>
         {% endblock title %}
         {% block details %}{% endblock details %}
 	{% block files %}{% endblock files %}
@@ -165,7 +164,6 @@
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="{{page.root}}/js/bootstrap/bootstrap.min.js"></script>
     {% block pagejs%}{% endblock %}
-    {{ browserid_js() }}
     <!-- Google Analytics -->
     <script type="text/javascript">
       var _gaq = _gaq || [];
