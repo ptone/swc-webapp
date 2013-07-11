@@ -20,7 +20,7 @@ class EventDetail(DetailView):
     context_object_name = 'event'
     template_name = "event_detail.html"
 
-# TODO login required
+# note login_required applied at URL
 class EditProfile(UpdateView):
     model = SWCPerson
     form_class = ProfileForm
