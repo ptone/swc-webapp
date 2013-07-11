@@ -18,7 +18,7 @@ class GeoLocation(models.Model):
     An abstract class to house geographic info
     """
     # raw geocode data from google API
-    geodata = JSONField()
+    geodata = JSONField(blank=True)
     country = models.CharField(max_length=50, blank=True)
     lat = models.FloatField(null=True, blank=True)
     long = models.FloatField(null=True, blank=True)
