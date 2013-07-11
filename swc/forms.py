@@ -31,6 +31,11 @@ class ProfileForm(forms.ModelForm):
             m.geo_type = m.geodata['geometry']['location_type']
             m.lat = m.geodata['lat_val']
             m.long = m.geodata['long_val']
+            for comp in m.geodata['address_components']:
+                if 'country' in comp['types']:
+                    m.country = comp['long_name']
+                    m.country_short = comp['short_name'].lower()
+                    break
         if commit:
             m.save()
         return m

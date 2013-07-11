@@ -2,14 +2,24 @@
 {% block css%}
 {{ super() }}
 {{ form.media.css }}
+ <link href="{{page.shared}}/css/flags.css" rel="stylesheet" />
 {% endblock %}
+
 {% block pagetitle %}<title>Bootcampes</title>{% endblock pagetitle %}
 {% block content %}
 <form action="" method="post">
     {{ csrf() }}
+
     {{ form }}
     <div class="well">
         <label>Location: <i>(you may enter city name, airport, or full address)</i></label>
+
+        <img id="country-flag" src="{{page.shared}}/img/blank.gif"
+        {% if profile.country %}
+        class="flag flag-{{ profile.country_short }}" alt="{{ profile.country }}"
+        {% endif %}
+         />
+
         <input id="addresspicker_map" value="{{ profile.geodata.formatted_address }}" />
         <div style="width:300px;height:300px;margin-top:20px">
             <div id="map_canvas" style="width:100%; height:100%"></div>
@@ -46,10 +56,19 @@
         });
 
         addresspickerMap.on("addressChanged", function(evt, address) {
+            // add the lat long to the JS obj - because the mapping names
+            // are minimized, and the JS class has special methods
             address.lat_val = address.geometry.location.lat();
             address.long_val = address.geometry.location.lng();
             $('#id_new_geo').val($.toJSON(address));
-            console.log(address.geometry.location.toString());
+            // extract the country and update flag graphic
+            var countryCode;
+            $.each(address.address_components, function(index, value){
+                if (value.types.indexOf('country') >= 0) {
+                    countryCode = value.short_name.toLowerCase();
+                }
+                });
+            $('#country-flag').attr('class', 'flag flag-' + countryCode);
 
         });
         addresspickerMap.on("positionChanged", function(evt, markerPosition) {

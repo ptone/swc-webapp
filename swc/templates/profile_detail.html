@@ -1,9 +1,20 @@
 {% extends "_base.html" %}
+{% block css%}
+{{ super() }}
+ <link href="{{page.shared}}/css/flags.css" rel="stylesheet" />
+{% endblock %}
+
 {% block pagetitle %}<title>Bootcampes</title>{% endblock pagetitle %}
 {% block content %}
 {% if user.id == profile.user.id %}
     <a href="{{ url('profile_edit')}}">Edit your profile</a>
 {% endif %}
+        {% if profile.country %}
+        <img id="country-flag" src="{{page.shared}}/img/blank.gif"
+        class="flag flag-{{ profile.country_short }}" alt="{{ profile.country }}"
+         />
+        {% endif %}
+
 {{ profile.name1 }}
 {% endblock content %}
 

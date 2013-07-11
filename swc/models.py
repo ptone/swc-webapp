@@ -20,6 +20,7 @@ class GeoLocation(models.Model):
     # raw geocode data from google API
     geodata = JSONField(blank=True)
     country = models.CharField(max_length=50, blank=True)
+    country_short = models.CharField(max_length=2, blank=True)
     lat = models.FloatField(null=True, blank=True)
     long = models.FloatField(null=True, blank=True)
     # the google geocode type resolution
