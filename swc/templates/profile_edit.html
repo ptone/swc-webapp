@@ -6,22 +6,20 @@
 {% block pagetitle %}<title>Bootcampes</title>{% endblock pagetitle %}
 {% block content %}
 <form action="" method="post">
+    {{ csrf() }}
+    {{ form }}
     <div class="well">
-        <div style="float:right"> try: <i>Berlin Kreuzberg</i>, <i>Manhattan Central Park</i> or <i>London Soho</i><br/>
-            Then try to move the marker on the map and see how the address changes. Magic. </div>
-        <label>Address: </label>
+        <label>Location: <i>(you may enter city name, airport, or full address)</i></label>
         <input id="addresspicker_map" value="{{ profile.geodata.formatted_address }}" />
         <div style="width:300px;height:300px;margin-top:20px">
             <div id="map_canvas" style="width:100%; height:100%"></div>
             <div id="location" class=""></div>
         </div>
-
     </div>
-    {{ csrf() }}
-    {{ form }}
+
     <input type="submit" value="Submit" />
 </form>
-{{ profile }}
+
 
 {% endblock content %}
 
@@ -29,36 +27,38 @@
 {{ super() }}
 {{ form.media.js }}
 <script type="text/javascript" charset="utf-8">
-$(document).ready(function() {
-    console.log("hello from profile_edit.js");
-    var addresspicker = $( "#addresspicker" ).addresspicker();
-    var addresspickerMap = $( "#addresspicker_map" ).addresspicker(
-    {
-        regionBias: "de",
-        map:      "#map_canvas",
-        typeaheaddelay: 1000,
-        mapOptions: {
-            zoom:16,
-            center: new google.maps.LatLng({{ profile.lat }}, {{ profile.long }})
-        }
-
-    });
-
-    addresspickerMap.on("addressChanged", function(evt, address) {
-        address.lat_val = address.geometry.location.lat();
-        address.long_val = address.geometry.location.lng();
-        $('#id_new_geo').val($.toJSON(address));
-        console.log(address.geometry.location.toString());
-
-    });
-    addresspickerMap.on("positionChanged", function(evt, markerPosition) {
-        markerPosition.getAddress( function(address) {
-            if (address) {
-                $( "#addresspicker_map").val(address.formatted_address);
+    // This script is inline for template expansion
+    $(document).ready(function() {
+        var addresspicker = $( "#addresspicker" ).addresspicker();
+        var addresspickerMap = $( "#addresspicker_map" ).addresspicker(
+        {
+            regionBias: "de",
+            map:      "#map_canvas",
+            typeaheaddelay: 1000,
+            mapOptions: {
+                zoom:16,
+                center: new google.maps.LatLng(
+                    {{ profile.lat|default('43.6481', true) }},
+                    {{ profile.long|default('-79.4042', true) }}
+                    )
             }
-        })
-    });
-});
 
+        });
+
+        addresspickerMap.on("addressChanged", function(evt, address) {
+            address.lat_val = address.geometry.location.lat();
+            address.long_val = address.geometry.location.lng();
+            $('#id_new_geo').val($.toJSON(address));
+            console.log(address.geometry.location.toString());
+
+        });
+        addresspickerMap.on("positionChanged", function(evt, markerPosition) {
+            markerPosition.getAddress( function(address) {
+                if (address) {
+                    $( "#addresspicker_map").val(address.formatted_address);
+                }
+            })
+        });
+    });
 </script>
 {% endblock %}
