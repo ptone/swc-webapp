@@ -39,7 +39,7 @@ urlpatterns = patterns('',
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout',
         name='logout'),
 
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^manage/', include(admin.site.urls)),
 
     url(r'', include('social_auth.urls')),
 
