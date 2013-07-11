@@ -6,7 +6,7 @@ from django.views.generic import TemplateView
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-from swc.views import UpcomingBootcamps, EventDetail
+from swc.views import UpcomingBootcamps, EventDetail, EditProfile, ProfileView
 
 admin.autodiscover()
 
@@ -14,6 +14,11 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'project.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
+
+    url(r'^people/(?P<pk>\d+)/edit/',
+        EditProfile.as_view(), name='profile_edit'),
+    url(r'^people/(?P<pk>\d+)/',
+        ProfileView.as_view(), name='profile_view'),
     url(r'^bootcamps/upcoming/', UpcomingBootcamps.as_view(),
         name='bootcamps_upcoming'),
     url(r'^bootcamps/(?P<pk>\d+)/(?P<slug>[-\w\d]+)', EventDetail.as_view(),

@@ -1,6 +1,8 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, UpdateView
+from django.contrib.auth.decorators import login_required
 
-from swc.models import SWCEvent
+from .models import SWCEvent, SWCPerson
+from .forms import ProfileForm
 
 
 class EventList(ListView):
@@ -17,3 +19,22 @@ class EventDetail(DetailView):
     model = SWCEvent
     context_object_name = 'event'
     template_name = "event_detail.html"
+
+# TODO login required
+class EditProfile(UpdateView):
+    model = SWCPerson
+    form_class = ProfileForm
+    template_name = 'profile_edit.html'
+    context_object_name = 'profile'
+
+    def get_object(self):
+        obj, created = SWCPerson.objects.get_or_create(user=self.request.user,
+                defaults={'profile_email': self.request.user.email})
+        return obj
+
+
+class ProfileView(DetailView):
+    model = SWCPerson
+    fields = ['name1']
+    template_name = 'profile_detail.html'
+    context_object_name = 'profile'

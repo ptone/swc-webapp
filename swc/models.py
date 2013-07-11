@@ -6,10 +6,12 @@ from django.db import models
 
 from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
+from django.core.urlresolvers import reverse
 
 from jsonfield import JSONField
 from model_utils import Choices
 from model_utils.managers import QueryManager
+
 
 class GeoLocation(models.Model):
     """
@@ -21,7 +23,7 @@ class GeoLocation(models.Model):
     lat = models.FloatField(null=True, blank=True)
     long = models.FloatField(null=True, blank=True)
     # the google geocode type resolution
-    type = models.CharField(max_length=40, blank=True)
+    geo_type = models.CharField(max_length=40, blank=True)
     # the SWC notion of bootcamp regions, determined from country
     region = models.CharField(max_length=40, blank=True)
 
@@ -38,7 +40,7 @@ class SWCPerson(GeoLocation):
     bio = models.TextField(blank=True)
     # location
     # organizational affiliation
-    contact_phone = models.TextField(blank=True)
+    # contact_phone = models.TextField(blank=True)
     profile_email = models.EmailField(max_length=254, unique=True, blank=True)
 
     class Meta:
@@ -46,6 +48,9 @@ class SWCPerson(GeoLocation):
 
     def __str__(self):
         return "{} {}".format(self.name1, self.name2)
+
+    def get_absolute_url(self):
+        return reverse('profile_view', kwargs={'pk': self.id})
 
     @property
     def email(self):
