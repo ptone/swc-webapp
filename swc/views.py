@@ -38,3 +38,15 @@ class ProfileView(DetailView):
     fields = ['name1']
     template_name = 'profile_detail.html'
     context_object_name = 'profile'
+
+    def get_object(self):
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        if pk is None:
+            obj, created = SWCPerson.objects.get_or_create(
+                    user=self.request.user,
+                    defaults={'profile_email': self.request.user.email}
+                    )
+            return obj
+        return super(ProfileView, self).get_object()
+
+

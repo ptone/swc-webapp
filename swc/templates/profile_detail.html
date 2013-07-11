@@ -1,6 +1,9 @@
 {% extends "_base.html" %}
 {% block pagetitle %}<title>Bootcampes</title>{% endblock pagetitle %}
 {% block content %}
+{% if user.id == profile.user.id %}
+    <a href="{{ url('profile_edit')}}">Edit your profile</a>
+{% endif %}
 {{ profile.name1 }}
 {% endblock content %}
 

@@ -66,11 +66,11 @@
             </ul>
           </li>
           <li id="nav-badges"><a href="{{site.swc_prefix}}/badges/index.html">Badges</a></li>
-          <li id="auth">
                 {% if user.is_authenticated() %}
-                        <a href="{{ url('logout') }}">logout</a>
+                <li id="auth"> <a href="{{ url('logout') }}">logout</a></li>
+                <li><a href="{{ url('profile_view_user') }}">your profile</a></li>
                     {% else %}
-                        <a href="{{ url('login') }}">login</a>
+                        <li id="auth"> <a href="{{ url('login') }}">login</a></li>
                     {% endif %}
               </li>
         </ul>

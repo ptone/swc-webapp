@@ -16,20 +16,33 @@ urlpatterns = patterns('',
     # url(r'^$', 'project.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^people/(?P<pk>\d+)/edit/$',
+    url(r'^profile/edit/$',
         login_required(EditProfile.as_view()), name='profile_edit'),
-    url(r'^people/(?P<pk>\d+)/',
+
+    url(r'^profile/(?P<pk>\d+)/',
         ProfileView.as_view(), name='profile_view'),
+
+    url(r'^profile/$',
+        ProfileView.as_view(), name='profile_view_user'),
+
     url(r'^bootcamps/upcoming/', UpcomingBootcamps.as_view(),
         name='bootcamps_upcoming'),
+
     url(r'^bootcamps/(?P<pk>\d+)/(?P<slug>[-\w\d]+)', EventDetail.as_view(),
         name='event_detail'),
+
     url(r'^bootcamps/(?P<pk>\d+)/', EventDetail.as_view(),
         name='event_detail_id'),
+
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
-    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', name='logout'),
+
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout',
+        name='logout'),
+
     url(r'^admin/', include(admin.site.urls)),
+
     url(r'', include('social_auth.urls')),
+
     url(r'^$', TemplateView.as_view(template_name='home.html'), name='home'),
 )
 
