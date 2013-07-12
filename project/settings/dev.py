@@ -14,3 +14,5 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'dev-db.sqlite3'),
     }
 }
+
+MIDDLEWARE_CLASSES += ('ajaxerrors.middleware.ShowAJAXErrors',)
