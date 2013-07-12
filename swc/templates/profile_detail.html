@@ -9,7 +9,9 @@
 {% if user.id == profile.user.id %}
     <a href="{{ url('profile_edit')}}">Edit your profile</a>
 {% endif %}
-        {{ gravatar(profile.email) }}
+        {% if profile.email %}
+            {{ gravatar(profile.email) }}
+        {% endif %}
         {% if profile.country %}
         <img id="country-flag" src="{{page.shared}}/img/blank.gif"
         class="flag flag-{{ profile.country_short }}" alt="{{ profile.country }}"
