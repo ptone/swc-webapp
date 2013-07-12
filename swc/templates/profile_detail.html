@@ -4,7 +4,7 @@
  <link href="{{page.shared}}/css/flags.css" rel="stylesheet" />
 {% endblock %}
 
-{% block pagetitle %}<title>Bootcampes</title>{% endblock pagetitle %}
+{% block pagetitle %}<title>Profile</title>{% endblock pagetitle %}
 {% block content %}
 {% if user.id == profile.user.id %}
     <a href="{{ url('profile_edit')}}">Edit your profile</a>

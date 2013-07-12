@@ -5,7 +5,7 @@
  <link href="{{page.shared}}/css/flags.css" rel="stylesheet" />
 {% endblock %}
 
-{% block pagetitle %}<title>Bootcampes</title>{% endblock pagetitle %}
+{% block pagetitle %}<title>Profile Edit</title>{% endblock pagetitle %}
 {% block content %}
 <form action="" method="post">
     {{ csrf() }}
@@ -20,7 +20,7 @@
         {% endif %}
          />
 
-        <input id="addresspicker_map" value="{{ profile.geodata.formatted_address }}" />
+        <input id="addresspicker_map"  autocomplete="off" value="{{ profile.geodata.formatted_address }}" />
         <div style="width:300px;height:300px;margin-top:20px">
             <div id="map_canvas" style="width:100%; height:100%"></div>
             <div id="location" class=""></div>
