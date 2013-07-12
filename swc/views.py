@@ -6,6 +6,8 @@ from django.core.exceptions import PermissionDenied
 from django.views.generic import ListView, DetailView, UpdateView, View
 from django.shortcuts import render
 
+from django.contrib.auth.decorators import login_required
+
 from braces.views import JSONResponseMixin
 
 from .models import SWCEvent, SWCPerson, TimeChunk
@@ -52,6 +54,7 @@ class ProfileView(DetailView):
         return super(ProfileView, self).get_object()
 
 
+@login_required
 def calendar(request, target='user'):
     if target == 'user':
         target_pk = 0
@@ -112,18 +115,16 @@ class TimeChunkData(JSONResponseMixin, View):
     http_method_names = [u'get']
 
     def get(self, *args, **kwargs):
-        print self.request.GET
-        start_date_range =  datetime.datetime.utcfromtimestamp(
+        start_date_range = datetime.datetime.utcfromtimestamp(
                 int(self.request.GET.get('start'))).date()
-        end_date_range =  datetime.datetime.utcfromtimestamp(
+        end_date_range = datetime.datetime.utcfromtimestamp(
                 int(self.request.GET.get('end'))).date()
-        print kwargs
         if kwargs['source'] == 'user':
             person = SWCPerson.get_for_user(self.request.user)
             chunks = TimeChunk.objects.filter(
                     person=person,
                     start_date__gte=start_date_range).filter(
-                    start_date__lte=end_date_range)
+                    start_date__lte=end_date_range)  # nopep8
         else:
             # TODO event source
             pass

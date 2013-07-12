@@ -3,13 +3,17 @@
 {{ super() }}
  <link href="{{page.shared}}/fullcalendar/fullcalendar.css" rel="stylesheet" />
  <link href="{{page.shared}}/fullcalendar/fullcalendar.print.css" rel="stylesheet" />
+<style type="text/css">
+.fc-event-inner {
+   background-color: 'blue';
+}
+</style>
 {% endblock css %}
 
 {% block pagetitle %}<title>Profile Edit</title>{% endblock pagetitle %}
 {% block content %}
 <h2>calendar</h2>
 <div id='calendar'></div>
-{{ url('calendar_data', source=target, pk=target_pk) }}
 {% endblock content %}
 
 {% block pagejs %}
