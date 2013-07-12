@@ -7,7 +7,8 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-from swc.views import UpcomingBootcamps, EventDetail, EditProfile, ProfileView
+from swc.views import (UpcomingBootcamps, EventDetail, EditProfile,
+        ProfileView, AddTimeChunk)
 
 admin.autodiscover()
 
@@ -35,6 +36,8 @@ urlpatterns = patterns('',
 
     url(r'^bootcamps/(?P<pk>\d+)/', EventDetail.as_view(),
         name='event_detail_id'),
+
+    url(r'^dates/add/$', AddTimeChunk.as_view(), name='dates_add'),
 
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
 

@@ -18,6 +18,40 @@
     <script type="text/javascript">
 
 $(document).ready(function() {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type)) {
+                // Send the token to same-origin, relative URLs only.
+                // Send the token only if the method warrants CSRF protection
+                // Using the CSRFToken value acquired earlier
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
 
     // page is now ready, initialize the calendar...
     var selectedEvent;
@@ -29,9 +63,15 @@ $(document).ready(function() {
                 selectHelper: true,
                 select: function(start, end, allDay) {
                     console.log(start, end, allDay);
+                    $.post("{{ url('dates_add')}}",
+                        {start:start, end:end, target:"{{ target }}"},
+                        function(data) {
+                        console.log('event added');
+                        console.log(data);
+                        }
+)
                     eventID++;
-                    var e = calendar.fullCalendar('renderEvent',
-                        {
+                    var e = calendar.fullCalendar('renderEvent', {
                             title: 'event-' + eventID,
                             start: start,
                             end: end,
