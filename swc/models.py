@@ -127,4 +127,9 @@ class Participant(models.Model):
     def __str__(self):
         return '{}-{}-{}'.format(self.event, self.person, self.role)
 
-# TODO Badge
+
+class TimeChunk(models.Model):
+    start_date = models.DateField()
+    end_date = models.DateField()
+    event = models.ForeignKey(SWCEvent, related_name="start_ranges")
+    person = models.ForeignKey(SWCPerson, related_name="available_dates")

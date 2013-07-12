@@ -25,6 +25,8 @@ urlpatterns = patterns('',
     url(r'^profile/$',
         ProfileView.as_view(), name='profile_view_user'),
 
+    url(r'^profile/calendar/$', 'swc.views.calendar'),
+
     url(r'^bootcamps/upcoming/', UpcomingBootcamps.as_view(),
         name='bootcamps_upcoming'),
 

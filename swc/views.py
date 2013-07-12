@@ -1,5 +1,5 @@
 from django.views.generic import ListView, DetailView, UpdateView
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
 from .models import SWCEvent, SWCPerson
 from .forms import ProfileForm
@@ -49,4 +49,5 @@ class ProfileView(DetailView):
             return obj
         return super(ProfileView, self).get_object()
 
-
+def calendar(request):
+    return render(request, "calendar_test.html")

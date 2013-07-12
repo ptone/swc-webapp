@@ -1,0 +1,88 @@
+{% extends "_base.html" %}
+{% block css%}
+{{ super() }}
+ <link href="{{page.shared}}/fullcalendar/fullcalendar.css" rel="stylesheet" />
+ <link href="{{page.shared}}/fullcalendar/fullcalendar.print.css" rel="stylesheet" />
+{% endblock css %}
+
+{% block pagetitle %}<title>Profile Edit</title>{% endblock pagetitle %}
+{% block content %}
+<h2>calendar</h2>
+<div id='calendar'></div>
+{% endblock content %}
+
+{% block pagejs %}
+{{ super() }}
+    <script src="{{page.root}}/fullcalendar/fullcalendar.min.js"></script>
+    <script src="{{page.root}}/fullcalendar/jquery-ui-1.10.2.custom.min.js"></script>
+    <script type="text/javascript">
+
+$(document).ready(function() {
+
+    // page is now ready, initialize the calendar...
+    var selectedEvent;
+    var eventID = 1
+    var calendar = $('#calendar').fullCalendar({
+        // put your options and callbacks here
+                selectable: true,
+                editable: true,
+                selectHelper: true,
+                select: function(start, end, allDay) {
+                    console.log(start, end, allDay);
+                    eventID++;
+                    var e = calendar.fullCalendar('renderEvent',
+                        {
+                            title: 'event-' + eventID,
+                            start: start,
+                            end: end,
+                            allDay: allDay,
+                            id: 'event-' + eventID,
+                        },
+                        true // make the event "stick"
+                    );
+                    console.log(e);
+                    calendar.fullCalendar('unselect');
+
+                    },
+                eventAfterRender: function( event, element, view ) {
+                    element.popover({
+                        title: "Delete Availability",
+                        content: '<button class="btn btn-danger delete-button ' + event.id + '"><i class="icon-remove-sign icon-white"></i> | Delete ' + event.id + '</button',
+                        placement: 'bottom',
+                        html: true,
+                        trigger: 'manual',
+                        // delay: 1000,
+                        });
+                  },
+                   eventClick: function(calEvent, jsEvent, view) {
+                        $('.fc-event').not(this).popover('hide');
+                        $('.fc-event').each(function(index, obj) {
+                                if ($(obj).prop("id") != $(this).prop("id")) {
+                                   // $(obj).popover('hide');
+                                    }
+                                });
+                        $(this).popover('show');
+                    }
+
+
+    }); //end calendar
+
+
+    //$('.delete-button').on('click', function (e) {
+    $('body').on('click', '.popover button', function (e) {
+        // see also: http://stackoverflow.com/questions/13205103/attach-event-handler-to-button-in-twitter-bootstrap-popover
+        // console.log(e);
+            var classes = $(this).attr('class').split(/\s+/).pop();
+            console.log(classes);
+            //var evento = $(this).closest('.popover').siblings('.fc-event.' + classes)[0];
+            //$(evento).attr('id', 'delete-me')
+            calendar.fullCalendar('removeEvents', classes);
+
+     //your awesome code here
+
+})
+});
+    </script>
+{% endblock pagejs %}
+
+
