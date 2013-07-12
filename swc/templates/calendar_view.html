@@ -78,7 +78,7 @@ $(document).ready(function() {
                                     allDay: allDay,
                                     id: 'event-' + data.eventid,
                                 },
-                                true // make the event "stick"
+                                false // don't make the event "stick", we reload with our data URL
                             );
                             console.log(e);
                             calendar.fullCalendar('unselect');
