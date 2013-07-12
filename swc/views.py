@@ -56,6 +56,7 @@ def calendar(request):
 class AddTimeChunk(JSONResponseMixin, View):
     http_method_names = [u'post']
 
+    # TODO needs auth checks
     def post(self, *args, **kwargs):
         start = parse(self.request.POST.get('start'))
         end = parse(self.request.POST.get('end'))
@@ -69,4 +70,14 @@ class AddTimeChunk(JSONResponseMixin, View):
             event = SWCEvent.objects.get(pk=pk)
             create_kwargs['event'] = event
         chunk, created = TimeChunk.objects.get_or_create(**create_kwargs)
-        return self.render_json_response({"msg": "OK", "event-id": chunk.id})
+        return self.render_json_response({"msg": "OK", "eventid": chunk.id})
+
+
+class DeleteTimeChunk(JSONResponseMixin, View):
+    http_method_names = [u'post']
+
+    def post(self, *args, **kwargs):
+        # TODO all kinds of permission checking go here
+        pk = self.request.POST.get('eventid').split('-')[1]
+        TimeChunk.objects.get(pk=int(pk)).delete()
+        return self.render_json_response({"msg": "OK"})

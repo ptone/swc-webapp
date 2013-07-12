@@ -52,12 +52,8 @@ $(document).ready(function() {
         }
     });
 
-
     // page is now ready, initialize the calendar...
-    var selectedEvent;
-    var eventID = 1
     var calendar = $('#calendar').fullCalendar({
-        // put your options and callbacks here
                 selectable: true,
                 editable: true,
                 selectHelper: true,
@@ -66,24 +62,23 @@ $(document).ready(function() {
                     $.post("{{ url('dates_add')}}",
                         {start:start, end:end, target:"{{ target }}"},
                         function(data) {
-                        console.log('event added');
                         console.log(data);
+                        if (data.msg == "OK") {
+                            var e = calendar.fullCalendar('renderEvent', {
+                                    title: 'event-' + data.eventid,
+                                    start: start,
+                                    end: end,
+                                    allDay: allDay,
+                                    id: 'event-' + data.eventid,
+                                },
+                                true // make the event "stick"
+                            );
+                            console.log(e);
+                            calendar.fullCalendar('unselect');
                         }
-)
-                    eventID++;
-                    var e = calendar.fullCalendar('renderEvent', {
-                            title: 'event-' + eventID,
-                            start: start,
-                            end: end,
-                            allDay: allDay,
-                            id: 'event-' + eventID,
-                        },
-                        true // make the event "stick"
-                    );
-                    console.log(e);
-                    calendar.fullCalendar('unselect');
-
-                    },
+                        }
+                    )
+                },
                 eventAfterRender: function( event, element, view ) {
                     element.popover({
                         title: "Delete Availability",
@@ -91,14 +86,12 @@ $(document).ready(function() {
                         placement: 'bottom',
                         html: true,
                         trigger: 'manual',
-                        // delay: 1000,
                         });
                   },
                    eventClick: function(calEvent, jsEvent, view) {
                         $('.fc-event').not(this).popover('hide');
                         $('.fc-event').each(function(index, obj) {
                                 if ($(obj).prop("id") != $(this).prop("id")) {
-                                   // $(obj).popover('hide');
                                     }
                                 });
                         $(this).popover('show');
@@ -108,17 +101,19 @@ $(document).ready(function() {
     }); //end calendar
 
 
-    //$('.delete-button').on('click', function (e) {
     $('body').on('click', '.popover button', function (e) {
+        // handle the delete button click, and delete corresponding cal event
         // see also: http://stackoverflow.com/questions/13205103/attach-event-handler-to-button-in-twitter-bootstrap-popover
-        // console.log(e);
-            var classes = $(this).attr('class').split(/\s+/).pop();
-            console.log(classes);
-            //var evento = $(this).closest('.popover').siblings('.fc-event.' + classes)[0];
-            //$(evento).attr('id', 'delete-me')
-            calendar.fullCalendar('removeEvents', classes);
+            var eventid = $(this).attr('class').split(/\s+/).pop();
+            console.log(eventid);
+            $.post("{{ url('dates_delete')}}", {eventid:eventid},
+                    function(data) {
+                        if (data.msg == "OK") {
+                            console.log('delete ok')
+                            calendar.fullCalendar('removeEvents', eventid);
+                            }
+                        });
 
-     //your awesome code here
 
 })
 });
