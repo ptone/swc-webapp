@@ -48,6 +48,16 @@ class SWCPerson(GeoLocation):
     class Meta:
         verbose_name_plural = "People"
 
+    @classmethod
+    def get_for_user(self, user):
+        if user.id:  # a saved user
+            obj, created = self.objects.get_or_create(
+                    user=user,
+                    defaults={'profile_email': user.email}
+                    )
+            return obj
+        return None
+
     def __str__(self):
         return "{} {}".format(self.name1, self.name2)
 
@@ -96,13 +106,13 @@ class SWCEvent(GeoLocation):
             registration='open',
             )
 
-    @property
-    def slug(self):
-        return self.__str__()
-
     class Meta:
         unique_together = (("start_date", "venue"),)
         ordering = ['start_date']
+
+    @property
+    def slug(self):
+        return self.__str__()
 
     def __str__(self):
         return "{}-{}".format(self.start_date, self.venue)

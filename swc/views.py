@@ -20,6 +20,7 @@ class EventDetail(DetailView):
     context_object_name = 'event'
     template_name = "event_detail.html"
 
+
 # note login_required applied at URL
 class EditProfile(UpdateView):
     model = SWCPerson
@@ -28,9 +29,7 @@ class EditProfile(UpdateView):
     context_object_name = 'profile'
 
     def get_object(self):
-        obj, created = SWCPerson.objects.get_or_create(user=self.request.user,
-                defaults={'profile_email': self.request.user.email})
-        return obj
+        return SWCPerson.get_for_user(self.request.user)
 
 
 class ProfileView(DetailView):
@@ -42,12 +41,9 @@ class ProfileView(DetailView):
     def get_object(self):
         pk = self.kwargs.get(self.pk_url_kwarg, None)
         if pk is None:
-            obj, created = SWCPerson.objects.get_or_create(
-                    user=self.request.user,
-                    defaults={'profile_email': self.request.user.email}
-                    )
-            return obj
+            return SWCPerson.get_for_user(self.request.user)
         return super(ProfileView, self).get_object()
+
 
 def calendar(request):
     return render(request, "calendar_test.html")
