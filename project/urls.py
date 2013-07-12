@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from swc.views import (UpcomingBootcamps, EventDetail, EditProfile,
-        ProfileView, AddTimeChunk, DeleteTimeChunk)
+        ProfileView, AddTimeChunk, DeleteTimeChunk, TimeChunkData)
 
 admin.autodiscover()
 
@@ -26,7 +26,9 @@ urlpatterns = patterns('',
     url(r'^profile/$',
         ProfileView.as_view(), name='profile_view_user'),
 
-    url(r'^profile/calendar/$', 'swc.views.calendar'),
+    url(r'^profile/calendar/$', 'swc.views.calendar',
+        kwargs={'target': 'user'},
+        name="person_calendar_edit"),
 
     url(r'^bootcamps/upcoming/', UpcomingBootcamps.as_view(),
         name='bootcamps_upcoming'),
@@ -39,6 +41,8 @@ urlpatterns = patterns('',
 
     url(r'^dates/add/$', AddTimeChunk.as_view(), name='dates_add'),
 
+    url(r'^dates/data/(?P<source>[-\d\w]+)/(?P<pk>\d+)/$',
+        TimeChunkData.as_view(), name='calendar_data'),
     url(r'^dates/delete/$', DeleteTimeChunk.as_view(), name='dates_delete'),
 
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),

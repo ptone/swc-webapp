@@ -9,6 +9,7 @@
 {% block content %}
 <h2>calendar</h2>
 <div id='calendar'></div>
+{{ url('calendar_data', source=target, pk=target_pk) }}
 {% endblock content %}
 
 {% block pagejs %}
@@ -55,7 +56,8 @@ $(document).ready(function() {
     // page is now ready, initialize the calendar...
     var calendar = $('#calendar').fullCalendar({
                 selectable: true,
-                editable: true,
+                // prevents dragging - can add later
+                editable: false,
                 selectHelper: true,
                 select: function(start, end, allDay) {
                     console.log(start, end, allDay);
@@ -88,14 +90,15 @@ $(document).ready(function() {
                         trigger: 'manual',
                         });
                   },
-                   eventClick: function(calEvent, jsEvent, view) {
-                        $('.fc-event').not(this).popover('hide');
-                        $('.fc-event').each(function(index, obj) {
-                                if ($(obj).prop("id") != $(this).prop("id")) {
-                                    }
-                                });
-                        $(this).popover('show');
-                    }
+                eventClick: function(calEvent, jsEvent, view) {
+                    $('.fc-event').not(this).popover('hide');
+                    $('.fc-event').each(function(index, obj) {
+                            if ($(obj).prop("id") != $(this).prop("id")) {
+                                }
+                            });
+                    $(this).popover('show');
+                            },
+                eventSources: ["{{ url('calendar_data', source=target, pk=target_pk) }}",],
 
 
     }); //end calendar

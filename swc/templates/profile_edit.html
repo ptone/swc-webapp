@@ -7,6 +7,8 @@
 
 {% block pagetitle %}<title>Profile Edit</title>{% endblock pagetitle %}
 {% block content %}
+
+<a href="{{ url('person_calendar_edit') }}">Edit my Availability</a>
 <form action="" method="post">
     {{ csrf() }}
 
