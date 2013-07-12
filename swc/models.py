@@ -39,9 +39,10 @@ class SWCPerson(GeoLocation):
     name1 = models.CharField(max_length=80)
     name2 = models.CharField(max_length=80, blank=True)
     bio = models.TextField(blank=True)
-    # location
+    # TODO fields to consider
     # organizational affiliation
     # contact_phone = models.TextField(blank=True)
+    # URL
     profile_email = models.EmailField(max_length=254, unique=True, blank=True)
 
     class Meta:
