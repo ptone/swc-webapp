@@ -141,5 +141,7 @@ class Participant(models.Model):
 class TimeChunk(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
-    event = models.ForeignKey(SWCEvent, related_name="start_ranges")
-    person = models.ForeignKey(SWCPerson, related_name="available_dates")
+    event = models.ForeignKey(SWCEvent, related_name="start_ranges",
+            blank=True, null=True)
+    person = models.ForeignKey(SWCPerson, related_name="available_dates",
+            blank=True, null=True)
