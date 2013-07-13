@@ -7,3 +7,4 @@ lxml==3.2.1
 pyquery==1.2.4
 readline==6.2.4.1
 requests==1.2.3
+django-ajaxerrors==1.1
